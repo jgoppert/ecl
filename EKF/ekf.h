@@ -281,7 +281,7 @@ private:
 	bool resetPosition();
 
 	// reset height state of the ekf
-	void resetHeight();
+	bool resetHeight();
 
 	void makeCovSymetrical();
 

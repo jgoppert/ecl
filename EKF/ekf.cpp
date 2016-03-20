@@ -342,7 +342,11 @@ bool Ekf::initialiseFilter(void)
 
 	// set the default height source from the adjustable parameter
 	if (_hgt_counter == 0) {
-		_primary_hgt_source = _params.vdist_sensor_type;
+		if (_params.fusion_mode & MASK_USE_EVPOS) {
+			_primary_hgt_source = VDIST_SENSOR_EV;
+		} else {
+			_primary_hgt_source = _params.vdist_sensor_type;
+		}
 	}
 
 	if (_primary_hgt_source == VDIST_SENSOR_RANGE) {
@@ -358,7 +362,7 @@ bool Ekf::initialiseFilter(void)
 			_hgt_filt_state = 0.9f * _hgt_filt_state + 0.1f * _range_sample_delayed.rng;
 		}
 
-	} else if (_primary_hgt_source == VDIST_SENSOR_BARO || _primary_hgt_source == VDIST_SENSOR_GPS) {
+	} else if (_primary_hgt_source == VDIST_SENSOR_BARO || _primary_hgt_source == VDIST_SENSOR_GPS || _primary_hgt_source == VDIST_SENSOR_EV) {
 		if (_baro_buffer.pop_first_older_than(_imu_sample_delayed.time_us, &_baro_sample_delayed)) {
 			if (_hgt_counter == 0) {
 				_control_status.flags.baro_hgt = true;
