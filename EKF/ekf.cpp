@@ -173,7 +173,9 @@ bool Ekf::initialiseFilter()
 	}
 
 	const bool not_enough_baro_samples_accumulated = _baro_counter <= 2u * _obs_buffer_length;
-	const bool not_enough_mag_samples_accumulated = _mag_counter <= 2u * _obs_buffer_length;
+	const bool not_enough_mag_samples_accumulated =
+		_params.mag_fusion_type != MAG_FUSE_TYPE_NONE &&
+		(_mag_counter <= 2u * _obs_buffer_length);
 
 	if (not_enough_baro_samples_accumulated || not_enough_mag_samples_accumulated) {
 		return false;
